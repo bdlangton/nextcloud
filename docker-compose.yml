@@ -1,0 +1,68 @@
+version: '2'
+
+volumes:
+  app:
+  db:
+  onlyoffice_data:
+  onlyoffice_log:
+
+networks:
+  nextcloud:
+    driver: 'bridge'
+
+services:
+  db:
+    image: mariadb
+    restart: always
+    volumes:
+      - /mnt/nextcloud/mysql:/var/lib/mysql
+    networks:
+      - nextcloud
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+
+  app:
+    image: nextcloud
+    ports:
+      - 5678:80
+    links:
+      - db
+    volumes:
+      - /mnt/nextcloud/data:/var/www/html
+    restart: always
+    networks:
+      - nextcloud
+
+  onlyoffice-document-server:
+    container_name: onlyoffice
+    image: onlyoffice/documentserver:latest
+    stdin_open: true
+    tty: true
+    restart: always
+    networks:
+      - nextcloud
+    ports:
+      - 5679:80
+    volumes:
+      - onlyoffice_data:/var/www/onlyoffice/Data
+      - onlyoffice_log:/var/log/onlyoffice
+
+  # cron:
+  #   image: nextcloud:fpm
+  #   restart: always
+  #   volumes:
+  #     - /mnt/nextcloud/data:/var/www/html
+  #   depends_on:
+  #     - app
+  #   entrypoint: |
+  #     bash -c 'bash -s <<EOF
+  #     trap "break;exit" SIGHUP SIGINT SIGTERM
+  #     while /bin/true; do
+  #       su -s "/bin/bash" -c "/usr/local/bin/php /var/www/html/cron.php" www-data
+  #       echo $$(date) - Running cron finished
+  #       sleep 900
+  #     done
+  #     EOF'
