@@ -12,6 +12,7 @@ networks:
 
 services:
   db:
+    container_name: nextcloud-db
     image: mariadb
     restart: always
     volumes:
@@ -25,6 +26,7 @@ services:
       - MYSQL_USER=${MYSQL_USER}
 
   app:
+    container_name: nextcloud
     image: nextcloud
     ports:
       - 5678:80
@@ -49,20 +51,3 @@ services:
     volumes:
       - onlyoffice_data:/var/www/onlyoffice/Data
       - onlyoffice_log:/var/log/onlyoffice
-
-  # cron:
-  #   image: nextcloud:fpm
-  #   restart: always
-  #   volumes:
-  #     - /mnt/nextcloud/data:/var/www/html
-  #   depends_on:
-  #     - app
-  #   entrypoint: |
-  #     bash -c 'bash -s <<EOF
-  #     trap "break;exit" SIGHUP SIGINT SIGTERM
-  #     while /bin/true; do
-  #       su -s "/bin/bash" -c "/usr/local/bin/php /var/www/html/cron.php" www-data
-  #       echo $$(date) - Running cron finished
-  #       sleep 900
-  #     done
-  #     EOF'
