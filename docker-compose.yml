@@ -16,7 +16,7 @@ services:
     image: mariadb
     restart: always
     volumes:
-      - /mnt/nextcloud/mysql:/var/lib/mysql
+      - /mnt/nextcloud/mysql:/var/lib/mysql:delegated
     networks:
       - nextcloud
     environment:
@@ -33,7 +33,7 @@ services:
     links:
       - db
     volumes:
-      - /mnt/nextcloud/data:/var/www/html
+      - /mnt/nextcloud/data:/var/www/html:delegated
     restart: always
     networks:
       - nextcloud
@@ -49,5 +49,5 @@ services:
     ports:
       - 5679:80
     volumes:
-      - onlyoffice_data:/var/www/onlyoffice/Data
-      - onlyoffice_log:/var/log/onlyoffice
+      - onlyoffice_data:/var/www/onlyoffice/Data:delegated
+      - onlyoffice_log:/var/log/onlyoffice:delegated
