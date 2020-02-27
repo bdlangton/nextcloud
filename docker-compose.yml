@@ -24,6 +24,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
+      - REDIS_HOST=redis
 
   app:
     container_name: nextcloud
@@ -51,3 +52,12 @@ services:
     volumes:
       - onlyoffice_data:/var/www/onlyoffice/Data:delegated
       - onlyoffice_log:/var/log/onlyoffice:delegated
+
+  redis:
+    container_name: nextcloud-redis
+    image: redis:5.0.7-alpine3.11
+    restart: always
+    networks:
+      - nextcloud
+    volumes:
+      - /mnt/nextcloud/redis:/data:delegated
