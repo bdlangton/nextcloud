@@ -27,14 +27,27 @@ services:
       - REDIS_HOST=redis
 
   app:
-    container_name: nextcloud
-    image: nextcloud
-    ports:
-      - 5678:80
+    container_name: nextcloud-app
+    image: nextcloud:fpm
     links:
       - db
     volumes:
       - /mnt/nextcloud/data:/var/www/html:delegated
+    restart: always
+    networks:
+      - nextcloud
+
+  web:
+    container_name: nextcloud-web
+    image: nginx
+    ports:
+      - 5678:80
+    links:
+      - app
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    volumes_from:
+      - app
     restart: always
     networks:
       - nextcloud
