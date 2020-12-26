@@ -17,7 +17,7 @@ services:
     restart: always
     mem_limit: 1g
     cpu_percent: 50
-    pids_limit: 10
+    pids_limit: 50
     volumes:
       - /mnt/nextcloud/mysql:/var/lib/mysql:delegated
     networks:
@@ -35,7 +35,7 @@ services:
     restart: always
     mem_limit: 1g
     cpu_percent: 50
-    pids_limit: 10
+    pids_limit: 50
     links:
       - db
     volumes:
@@ -49,7 +49,7 @@ services:
     restart: always
     mem_limit: 1g
     cpu_percent: 50
-    pids_limit: 10
+    pids_limit: 50
     ports:
       - "127.0.0.1:5678:80"
     links:
@@ -69,7 +69,7 @@ services:
     restart: always
     mem_limit: 1g
     cpu_percent: 50
-    pids_limit: 10
+    pids_limit: 50
     networks:
       - nextcloud
     ports:
@@ -84,7 +84,7 @@ services:
     restart: always
     mem_limit: 1g
     cpu_percent: 50
-    pids_limit: 10
+    pids_limit: 50
     networks:
       - nextcloud
     volumes:
