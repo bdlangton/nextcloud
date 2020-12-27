@@ -35,7 +35,7 @@ services:
     restart: always
     mem_limit: 1g
     cpu_percent: 50
-    pids_limit: 50
+    pids_limit: 100
     ports:
       - "127.0.0.1:5678:80"
     links:
@@ -47,13 +47,13 @@ services:
 
   onlyoffice-document-server:
     container_name: onlyoffice
-    image: onlyoffice/documentserver:latest
+    image: onlyoffice/documentserver:5.6
     stdin_open: true
     tty: true
     restart: always
     mem_limit: 1g
     cpu_percent: 50
-    pids_limit: 50
+    pids_limit: 200
     networks:
       - nextcloud
     ports:
