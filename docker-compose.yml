@@ -28,6 +28,11 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - REDIS_HOST=redis
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 45s
+      interval: 30s
+      retries: 5
 
   app:
     container_name: nextcloud-app
@@ -44,6 +49,11 @@ services:
       - /mnt/nextcloud/data:/var/www/html:delegated
     networks:
       - nextcloud
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost" ]
+      timeout: 45s
+      interval: 30s
+      retries: 5
 
   onlyoffice-document-server:
     container_name: onlyoffice
@@ -73,3 +83,8 @@ services:
       - nextcloud
     volumes:
       - /mnt/nextcloud/redis:/data:delegated
+    healthcheck:
+      test: [ "CMD", "redis-cli", "PING" ]
+      timeout: 45s
+      interval: 30s
+      retries: 5
